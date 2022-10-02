@@ -1,7 +1,6 @@
 package ru.rsreu;
 
-public final class SimpleCircleSquareCalculator implements CircleSquareCalculator {
-    @Override
+public final class SimpleCircleSquareCalculator {
     public double calculate(double radius) {
         if (radius < 0.0) {
             throw new IllegalArgumentException("Circle's radius must be bigger than 0");
