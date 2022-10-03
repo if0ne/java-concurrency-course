@@ -2,9 +2,11 @@ package ru.rsreu;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class TaskExecutor {
-    private static List<Task> tasks;
+    private final List<Task> tasks;
 
     public TaskExecutor() {
         tasks = new ArrayList<>();
