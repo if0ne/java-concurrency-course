@@ -33,13 +33,9 @@ public class Task implements Flow.Subscriber<Double> {
         }
     }
 
-    public void join() {
-        try {
-            thread.join(100_000_000);
-            status = TaskStatus.FINISHED;
-        } catch (InterruptedException exception) {
-            status = TaskStatus.INTERRUPTED;
-        }
+    public void join() throws InterruptedException {
+        thread.join(100_000_000);
+        status = TaskStatus.FINISHED;
     }
 
     @Override

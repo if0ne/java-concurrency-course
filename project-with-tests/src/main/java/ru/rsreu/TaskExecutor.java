@@ -39,7 +39,7 @@ public class TaskExecutor {
         }
     }
 
-    public void awaitTask(int taskId) throws IllegalArgumentException {
+    public void awaitTask(int taskId) throws IllegalArgumentException, InterruptedException {
         if (taskId > tasks.size()) {
             throw new IllegalArgumentException("There isn't task with id " + taskId);
         }

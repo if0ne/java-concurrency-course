@@ -21,6 +21,9 @@ public class Runner {
 
             try {
                 handleCommand(command);
+            } catch (InterruptedException exception) {
+                taskExecutor.stopAllTasks();
+                isExit = true;
             } catch (Exception exception) {
                 System.out.println(exception.getMessage());
             }
@@ -36,7 +39,7 @@ public class Runner {
         System.out.println("5. exit");
     }
 
-    private static void handleCommand(String[] args) throws IllegalArgumentException {
+    private static void handleCommand(String[] args) throws IllegalArgumentException, InterruptedException {
         switch (args[0]) {
             case "start": {
                 if (args.length != 2) {

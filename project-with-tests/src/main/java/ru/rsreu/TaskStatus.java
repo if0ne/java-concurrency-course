@@ -6,7 +6,7 @@ public enum TaskStatus {
     FINISHED("Finished"),
     INTERRUPTED("Interrupted");
 
-    private String nameAlias;
+    private final String nameAlias;
 
     TaskStatus(String nameAlias) {
         this.nameAlias = nameAlias;
