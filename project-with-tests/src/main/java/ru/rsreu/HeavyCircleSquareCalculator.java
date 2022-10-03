@@ -2,6 +2,7 @@ package ru.rsreu;
 
 import java.util.concurrent.Flow;
 import java.util.concurrent.SubmissionPublisher;
+import java.util.concurrent.ThreadLocalRandom;
 
 public final class HeavyCircleSquareCalculator implements Runnable, Flow.Publisher<Double> {
     private final long monteCarloRepeats;
@@ -19,8 +20,8 @@ public final class HeavyCircleSquareCalculator implements Runnable, Flow.Publish
     private double monteCarloPi() throws InterruptedException {
         int in_circle = 0;
         for (long i = 0; i < monteCarloRepeats; ++i) {
-            double x = Math.random();
-            double y = Math.random();
+            double x = ThreadLocalRandom.current().nextDouble();
+            double y = ThreadLocalRandom.current().nextDouble();
 
             if (x*x + y*y < 1.0) {
                 in_circle++;
@@ -46,7 +47,6 @@ public final class HeavyCircleSquareCalculator implements Runnable, Flow.Publish
             System.out.println("Task stopped");
             square = 0.0;
         }
-
     }
 
     @Override
