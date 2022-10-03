@@ -33,6 +33,12 @@ public class TaskExecutor {
         tasks.get(taskId - 1).stop();
     }
 
+    public void stopAllTasks() {
+        for (Task task : tasks) {
+            task.stop();
+        }
+    }
+
     public void awaitTask(int taskId) throws IllegalArgumentException {
         if (taskId > tasks.size()) {
             throw new IllegalArgumentException("There isn't task with id " + taskId);

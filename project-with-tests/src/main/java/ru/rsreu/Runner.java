@@ -73,6 +73,7 @@ public class Runner {
             }
             case "exit": {
                 isExit = true;
+                taskExecutor.stopAllTasks();
                 System.out.println("Exit...");
                 break;
             }
