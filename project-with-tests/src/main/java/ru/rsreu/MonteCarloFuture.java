@@ -1,18 +1,17 @@
 package ru.rsreu;
 
 import java.util.concurrent.Callable;
-import java.util.concurrent.Flow;
-import java.util.concurrent.SubmissionPublisher;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class MonteCarloFuture implements Callable<Long>, Flow.Publisher<Long> {
-    private final SubmissionPublisher<Long> publisher = new SubmissionPublisher<>();
+public class MonteCarloFuture implements Callable<Long> {
     private final long repeats;
     private final int logFrequency;
+    private final ParallelCircleSquareCalculator calculator;
 
-    public MonteCarloFuture(long repeats, int logFrequency) {
+    public MonteCarloFuture(long repeats, int logFrequency, ParallelCircleSquareCalculator calculator) {
         this.repeats = repeats;
         this.logFrequency = logFrequency;
+        this.calculator = calculator;
     }
 
     @Override
@@ -31,15 +30,10 @@ public class MonteCarloFuture implements Callable<Long>, Flow.Publisher<Long> {
 
             if (i / step > currentLog) {
                 currentLog++;
-                publisher.submit(step);
+                calculator.getProgress().updateProgress(step);
             }
         }
 
         return inCircle;
-    }
-
-    @Override
-    public void subscribe(Flow.Subscriber<? super Long> subscriber) {
-        publisher.subscribe(subscriber);
     }
 }

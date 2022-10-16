@@ -4,20 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
 
-public class ParallelCircleSquareCalculator implements Flow.Subscriber<Long> {
+public class ParallelCircleSquareCalculator {
 
     private final double radius;
     private final long repeats;
     private final int poolSize;
     private final ExecutorService executorService;
-
-    private long progress;
+    private volatile Progress progress;
 
     public ParallelCircleSquareCalculator(double radius, long repeats, int poolSize) {
         this.radius = radius;
         this.repeats = repeats;
         this.poolSize = poolSize;
-        this.progress = 0;
         this.executorService = Executors.newFixedThreadPool(poolSize);
     }
 
@@ -26,8 +24,7 @@ public class ParallelCircleSquareCalculator implements Flow.Subscriber<Long> {
 
         List<Future<Long>> futures = new ArrayList<>();
         for (int i = 0; i < poolSize; ++i) {
-            MonteCarloFuture task = new MonteCarloFuture(repeatsPerTask, 4);
-            task.subscribe(this);
+            MonteCarloFuture task = new MonteCarloFuture(repeatsPerTask, 8, this);
             futures.add(executorService.submit(task));
         }
 
@@ -45,29 +42,16 @@ public class ParallelCircleSquareCalculator implements Flow.Subscriber<Long> {
         return pi * radius * radius;
     }
 
-    private synchronized void updateProgress(long delta) {
-        progress += delta;
-        int percent = (int) Math.floor((double) progress / repeats * 100.0);
-        System.out.printf("Progress %d%%\n", percent);
+    public synchronized Progress getProgress() {
+        if (progress == null) {
+            synchronized (this) {
+                if (progress == null) {
+                    progress = new Progress(repeats);
+                }
+            }
+        }
+
+        return progress;
     }
 
-    @Override
-    public void onSubscribe(Flow.Subscription subscription) {
-        subscription.request(Long.MAX_VALUE);
-    }
-
-    @Override
-    public void onNext(Long item) {
-        updateProgress(item);
-    }
-
-    @Override
-    public void onError(Throwable throwable) {
-
-    }
-
-    @Override
-    public void onComplete() {
-
-    }
 }
