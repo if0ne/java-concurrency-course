@@ -15,7 +15,7 @@ public class Runner {
         firstThread.join();
         secondThread.join();
 
-        System.out.printf("Total number: %d\n", container.getNumberLetter());
+        System.out.printf("Total number: %d\n", container.getValue());
     }
 
 }

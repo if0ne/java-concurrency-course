@@ -1,6 +1,6 @@
 package ru.rsreu;
 
-public class ResultContainer {
+public class ResultContainer implements Container<Integer> {
 
     private final int trigger;
     private final int rawLetterRepresentation;
@@ -13,7 +13,8 @@ public class ResultContainer {
         numberLetter = 0;
     }
 
-    public synchronized void incrementNumberLetter() {
+    @Override
+    public synchronized void incrementValue() {
         numberLetter += 1;
 
         if (numberLetter == trigger) {
@@ -21,12 +22,13 @@ public class ResultContainer {
         }
     }
 
-    public int getRawLetterRepresentation() {
-        return rawLetterRepresentation;
+    @Override
+    public synchronized Integer getValue() {
+        return numberLetter;
     }
 
-    public synchronized int getNumberLetter() {
-        return numberLetter;
+    public int getRawLetterRepresentation() {
+        return rawLetterRepresentation;
     }
 
 }

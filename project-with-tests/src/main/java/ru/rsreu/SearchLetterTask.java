@@ -27,7 +27,7 @@ public class SearchLetterTask implements Runnable {
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             while (reader.ready()) {
                 if (reader.read() == container.getRawLetterRepresentation()) {
-                    container.incrementNumberLetter();
+                    container.incrementValue();
                 }
             }
         }
