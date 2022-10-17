@@ -42,7 +42,7 @@ public class ParallelCircleSquareCalculator {
         return pi * radius * radius;
     }
 
-    public synchronized Progress getProgress() {
+    public Progress getProgress() {
         if (progress == null) {
             synchronized (this) {
                 if (progress == null) {
