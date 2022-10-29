@@ -1,16 +1,25 @@
 package ru.rsreu;
 
+import java.util.concurrent.locks.ReentrantLock;
+
 public class Progress {
     private final long repeats;
     private long progress;
+
+    private final ReentrantLock reentrantLock = new ReentrantLock();
 
     public Progress(long repeats) {
         this.repeats = repeats;
     }
 
-    public synchronized void updateProgress(long delta) {
+    public void updateProgress(long delta) {
         //System.out.println(Thread.currentThread().getName());
-        progress += delta;
-        System.out.printf("Calculated %d out of %d\n", progress, repeats);
+        reentrantLock.lock();
+        try {
+            progress += delta;
+            System.out.printf("Calculated %d out of %d\n", progress, repeats);
+        } finally {
+            reentrantLock.unlock();
+        }
     }
 }

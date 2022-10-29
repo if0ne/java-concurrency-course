@@ -6,17 +6,21 @@ import java.util.concurrent.*;
 
 public class ParallelCircleSquareCalculator {
 
+    private final CountDownLatch latch;
+    private final Semaphore semaphore;
     private final double radius;
     private final long repeats;
     private final int poolSize;
     private final ExecutorService executorService;
     private volatile Progress progress;
 
-    public ParallelCircleSquareCalculator(double radius, long repeats, int poolSize) {
+    public ParallelCircleSquareCalculator(double radius, long repeats, int poolSize, int countTaskInAction) {
         this.radius = radius;
         this.repeats = repeats;
         this.poolSize = poolSize;
         this.executorService = Executors.newFixedThreadPool(poolSize);
+        this.latch = new CountDownLatch(poolSize);
+        this.semaphore = new Semaphore(countTaskInAction);
     }
 
     public double calculateSquare() {
@@ -24,7 +28,7 @@ public class ParallelCircleSquareCalculator {
 
         List<Future<Long>> futures = new ArrayList<>();
         for (int i = 0; i < poolSize; ++i) {
-            MonteCarloFuture task = new MonteCarloFuture(repeatsPerTask, 8, this);
+            MonteCarloFuture task = new MonteCarloFuture(repeatsPerTask, 8, latch, semaphore, this);
             futures.add(executorService.submit(task));
         }
 
