@@ -7,7 +7,7 @@ import java.util.concurrent.*;
 public class ParallelCircleSquareCalculator {
 
     private final CountDownLatch latch;
-    private final Semaphore semaphore;
+    private final BeautySemaphore semaphore;
     private final double radius;
     private final long repeats;
     private final int poolSize;
@@ -20,7 +20,7 @@ public class ParallelCircleSquareCalculator {
         this.poolSize = poolSize;
         this.executorService = Executors.newFixedThreadPool(poolSize);
         this.latch = new CountDownLatch(poolSize);
-        this.semaphore = new Semaphore(countTaskInAction);
+        this.semaphore = new BeautySemaphore(countTaskInAction);
     }
 
     public double calculateSquare() {

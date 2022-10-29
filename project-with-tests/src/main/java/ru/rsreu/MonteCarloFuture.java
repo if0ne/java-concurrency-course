@@ -6,10 +6,10 @@ public class MonteCarloFuture implements Callable<Long> {
     private final long repeats;
     private final int logFrequency;
     private final ParallelCircleSquareCalculator calculator;
-    private final Semaphore semaphore;
+    private final BeautySemaphore semaphore;
     private final CountDownLatch latch;
 
-    public MonteCarloFuture(long repeats, int logFrequency, CountDownLatch latch, Semaphore semaphore, ParallelCircleSquareCalculator calculator) {
+    public MonteCarloFuture(long repeats, int logFrequency, CountDownLatch latch, BeautySemaphore semaphore, ParallelCircleSquareCalculator calculator) {
         this.repeats = repeats;
         this.logFrequency = logFrequency;
         this.latch = latch;
