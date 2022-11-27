@@ -3,6 +3,7 @@ package ru.rsreu.credit.bank.queue;
 import ru.rsreu.credit.actions.*;
 import ru.rsreu.credit.bank.AbstractBank;
 import ru.rsreu.credit.bank.Currency;
+import ru.rsreu.credit.bank.storage.SingleThreadClientDatabase;
 import ru.rsreu.credit.client.Client;
 import ru.rsreu.credit.client.ClientInfo;
 import ru.rsreu.credit.exceptions.BankActionException;
@@ -19,6 +20,7 @@ public class QueueBankImpl extends AbstractBank {
     public QueueBankImpl(int poolSize) {
         super();
 
+        database = new SingleThreadClientDatabase();
         requestListener = new Thread(new RequestListener(requests));
         requestListener.start();
     }

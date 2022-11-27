@@ -3,23 +3,38 @@ package ru.rsreu.credit.bank;
 import ru.rsreu.credit.exceptions.*;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 public class Accounts {
-    private final ConcurrentMap<Currency, Account> accounts;
+    private final Map<Currency, Account> accounts;
 
     public Set<Map.Entry<Currency, Account>> accounts() {
         return accounts.entrySet();
     }
 
-    public Accounts() {
-        accounts = new ConcurrentHashMap<>(Currency.values().length, 1, Currency.values().length);
+    private Accounts(Map<Currency, Account> accounts) {
+        this.accounts = accounts;
+    }
+
+    public static Accounts createConcurrentAccounts() {
+        Map<Currency, Account> accounts = new ConcurrentHashMap<>();
         for (Currency currency : Currency.values()) {
             accounts.put(currency, new Account(BigDecimal.ZERO));
         }
+
+        return new Accounts(accounts);
+    }
+
+    public static Accounts createAccounts() {
+        Map<Currency, Account> accounts = new HashMap<>();
+        for (Currency currency : Currency.values()) {
+            accounts.put(currency, new Account(BigDecimal.ZERO));
+        }
+
+        return new Accounts(accounts);
     }
 
     public void deposit(Currency currency, BigDecimal value) throws BankActionException {

@@ -1,8 +1,8 @@
 package ru.rsreu.credit.actions;
 
 import ru.rsreu.credit.bank.Accounts;
+import ru.rsreu.credit.bank.storage.ClientDatabase;
 import ru.rsreu.credit.client.Client;
-import ru.rsreu.credit.bank.ClientDatabase;
 import ru.rsreu.credit.bank.Currency;
 import ru.rsreu.credit.exceptions.BankActionException;
 

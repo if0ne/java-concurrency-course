@@ -16,7 +16,7 @@ public class QueueBankImplStressTest {
 
     @Test
     public void stressTest() throws Exception {
-        final int clientCount = 10000;
+        final int clientCount = 1000;
         final List<Client> clients = new ArrayList<>();
 
         for (int i = 0; i < clientCount; ++i) {
@@ -44,7 +44,7 @@ public class QueueBankImplStressTest {
             }));
         }
 
-        long start = System.currentTimeMillis();
+        long start = System.nanoTime();
         for (Thread thread : threads) {
             thread.start();
         }
@@ -52,7 +52,7 @@ public class QueueBankImplStressTest {
         for (Thread thread : threads) {
             thread.join();
         }
-        System.out.printf("%.2f requests per second\n", (clientCount) / ((System.currentTimeMillis() - start) / 1000.0));
+        System.out.printf("%.2f requests per second\n", (clientCount) / ((System.nanoTime() - start) / 1000000000.0));
 
         for (Client client : clients) {
             ClientInfo info = bank.getClientInfo(client);

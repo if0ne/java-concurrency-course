@@ -4,6 +4,7 @@ import ru.rsreu.credit.actions.BlockAccount;
 import ru.rsreu.credit.actions.Deposit;
 import ru.rsreu.credit.actions.UnblockAccount;
 import ru.rsreu.credit.actions.Withdraw;
+import ru.rsreu.credit.bank.storage.ConcurrentClientDatabase;
 import ru.rsreu.credit.client.Client;
 import ru.rsreu.credit.client.ClientInfo;
 import ru.rsreu.credit.exceptions.BankActionException;
@@ -14,6 +15,8 @@ public class SimpleBankImpl extends AbstractBank {
 
     public SimpleBankImpl() {
         super();
+
+        database = new ConcurrentClientDatabase();
     }
 
     @Override
