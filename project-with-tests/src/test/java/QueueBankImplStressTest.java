@@ -1,6 +1,8 @@
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import ru.rsreu.credit.bank.*;
+import ru.rsreu.credit.bank.queue.QueueBankImpl;
 import ru.rsreu.credit.client.Client;
 import ru.rsreu.credit.client.ClientInfo;
 
@@ -9,8 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
-public class SimpleBankImplStressTest {
-    private final Bank bank = new SimpleBankImpl();
+public class QueueBankImplStressTest {
+    private final Bank bank = new QueueBankImpl(12);
 
     @Test
     public void stressTest() throws Exception {
@@ -46,7 +48,6 @@ public class SimpleBankImplStressTest {
         for (Thread thread : threads) {
             thread.start();
         }
-
 
         for (Thread thread : threads) {
             thread.join();
