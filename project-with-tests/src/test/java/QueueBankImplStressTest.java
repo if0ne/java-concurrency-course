@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 public class QueueBankImplStressTest {
-    private final Bank bank = new QueueBankImpl(12);
+    private final Bank bank = new QueueBankImpl();
 
     @Test
     public void stressTest() throws Exception {
@@ -44,11 +44,11 @@ public class QueueBankImplStressTest {
             }));
         }
 
-        long start = System.nanoTime();
         for (Thread thread : threads) {
             thread.start();
         }
 
+        long start = System.nanoTime();
         for (Thread thread : threads) {
             thread.join();
         }

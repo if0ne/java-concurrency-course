@@ -43,12 +43,11 @@ public class SimpleBankImplStressTest {
             }));
         }
 
-        long start = System.nanoTime();
         for (Thread thread : threads) {
             thread.start();
         }
 
-
+        long start = System.nanoTime();
         for (Thread thread : threads) {
             thread.join();
         }

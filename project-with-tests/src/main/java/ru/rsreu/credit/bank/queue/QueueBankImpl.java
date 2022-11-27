@@ -17,7 +17,7 @@ public class QueueBankImpl extends AbstractBank {
     private final BlockingQueue<SyncBankAction> requests = new LinkedBlockingQueue<>();
     private final Thread requestListener;
 
-    public QueueBankImpl(int poolSize) {
+    public QueueBankImpl() {
         super();
 
         database = new SingleThreadClientDatabase();
