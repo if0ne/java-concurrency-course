@@ -21,4 +21,9 @@ public class UnblockAccount implements BankAction {
         Accounts accounts = database.getClientAccounts(client);
         accounts.unblockAccount(currency);
     }
+
+    @Override
+    public Client getClient() {
+        return client;
+    }
 }

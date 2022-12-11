@@ -8,28 +8,45 @@ import com.lmax.disruptor.util.DaemonThreadFactory;
 import ru.rsreu.credit.actions.*;
 import ru.rsreu.credit.bank.AbstractBank;
 import ru.rsreu.credit.bank.Currency;
-import ru.rsreu.credit.bank.storage.ConcurrentClientDatabase;
 import ru.rsreu.credit.bank.storage.SingleThreadClientDatabase;
 import ru.rsreu.credit.client.Client;
 import ru.rsreu.credit.client.ClientInfo;
 import ru.rsreu.credit.exceptions.BankActionException;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class DisruptorBankImpl extends AbstractBank {
 
-    private final int BUFFER_SIZE = 65536;
+    private final int BUFFER_SIZE = 1024 * 32;
+    private final int HANDLERS = 8;
+    private final int HANDLER_SIZE = 1024 * 16;
     private final Disruptor<BankActionEvent> disruptor;
     private final RingBuffer<BankActionEvent> ringBuffer;
+
+    private final List<Disruptor<BankActionEvent>> handlers;
 
     public DisruptorBankImpl() {
         super();
         database = new SingleThreadClientDatabase();
 
-        WaitStrategy waitStrategy = new BlockingWaitStrategy();
-        disruptor = new Disruptor<>(new BankActionEventFactory(), BUFFER_SIZE, DaemonThreadFactory.INSTANCE, ProducerType.MULTI, waitStrategy);
+        disruptor = new Disruptor<>(new BankActionEventFactory(), BUFFER_SIZE, DaemonThreadFactory.INSTANCE, ProducerType.MULTI, new BlockingWaitStrategy());
         ringBuffer = disruptor.getRingBuffer();
-        disruptor.handleEventsWith(new BankActionEventHandler());
+
+        handlers = new ArrayList<>();
+        for (int i = 0; i < HANDLERS; ++i) {
+            Disruptor<BankActionEvent> handler = new Disruptor<>(new BankActionEventFactory(), HANDLER_SIZE, DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new BlockingWaitStrategy());
+            handler.handleEventsWith((events, sequence, isEnd) -> {
+               events.get().perform();
+               events.get().getSyncLatch().await(1_000_000, TimeUnit.MILLISECONDS);
+            });
+            handler.start();
+            handlers.add(handler);
+        }
+
+        disruptor.handleEventsWith(new BankActionEventHandler(handlers));
 
         disruptor.start();
     }
@@ -87,5 +104,8 @@ public class DisruptorBankImpl extends AbstractBank {
     @Override
     public void stopProcess() {
         disruptor.shutdown();
+        for (int i = 0; i < HANDLERS; ++i) {
+            handlers.get(i).shutdown();
+        }
     }
 }

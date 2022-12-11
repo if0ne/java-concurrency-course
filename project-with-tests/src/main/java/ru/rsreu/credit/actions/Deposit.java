@@ -27,4 +27,9 @@ public class Deposit implements BankAction {
         Accounts accounts = database.getClientAccounts(client);
         accounts.deposit(currency, value);
     }
+
+    @Override
+    public Client getClient() {
+        return client;
+    }
 }

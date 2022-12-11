@@ -1,5 +1,6 @@
 package ru.rsreu.credit.actions;
 
+import ru.rsreu.credit.client.Client;
 import ru.rsreu.credit.exceptions.BankActionException;
 
 import java.util.concurrent.CountDownLatch;
@@ -20,5 +21,10 @@ public class SyncBankAction implements BankAction {
     public void perform() throws BankActionException {
         action.perform();
         latch.countDown();
+    }
+
+    @Override
+    public Client getClient() {
+        return action.getClient();
     }
 }

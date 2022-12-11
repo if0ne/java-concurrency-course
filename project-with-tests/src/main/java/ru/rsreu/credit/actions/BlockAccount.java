@@ -27,4 +27,9 @@ public class BlockAccount implements BankAction {
         Accounts accounts = database.getClientAccounts(client);
         accounts.blockAccount(currency, value);
     }
+
+    @Override
+    public Client getClient() {
+        return client;
+    }
 }

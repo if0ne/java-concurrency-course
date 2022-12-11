@@ -26,4 +26,9 @@ public class Withdraw implements BankAction {
         Accounts accounts = database.getClientAccounts(client);
         accounts.withdraw(currency, value);
     }
+
+    @Override
+    public Client getClient() {
+        return client;
+    }
 }
