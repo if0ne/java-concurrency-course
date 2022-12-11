@@ -8,6 +8,7 @@ import com.lmax.disruptor.util.DaemonThreadFactory;
 import ru.rsreu.credit.actions.*;
 import ru.rsreu.credit.bank.AbstractBank;
 import ru.rsreu.credit.bank.Currency;
+import ru.rsreu.credit.bank.storage.ConcurrentClientDatabase;
 import ru.rsreu.credit.bank.storage.SingleThreadClientDatabase;
 import ru.rsreu.credit.client.Client;
 import ru.rsreu.credit.client.ClientInfo;
@@ -81,5 +82,10 @@ public class DisruptorBankImpl extends AbstractBank {
     @Override
     public ClientInfo getClientInfo(Client client) {
         return new ClientInfo(client, database.getClientAccounts(client));
+    }
+
+    @Override
+    public void stopProcess() {
+        disruptor.shutdown();
     }
 }

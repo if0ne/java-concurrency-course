@@ -59,4 +59,8 @@ public class QueueBankImpl extends AbstractBank {
     public ClientInfo getClientInfo(Client client) {
         return new ClientInfo(client, database.getClientAccounts(client));
     }
+
+    @Override
+    public void stopProcess() {
+    }
 }

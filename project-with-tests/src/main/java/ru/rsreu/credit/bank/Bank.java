@@ -13,4 +13,5 @@ public interface Bank {
     void blockAccount(Client client, Currency currency, BigDecimal value) throws BankActionException;
     void unblockAccount(Client client, Currency currency);
     ClientInfo getClientInfo(Client client);
+    void stopProcess();
 }

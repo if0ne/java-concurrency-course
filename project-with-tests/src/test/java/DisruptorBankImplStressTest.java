@@ -58,6 +58,8 @@ public class DisruptorBankImplStressTest {
         }
         System.out.printf("%.2f requests per second\n", (clientCount) / ((System.nanoTime() - start) / 1000000000.0));
 
+        bank.stopProcess();
+
         for (Client client : clients) {
             ClientInfo info = bank.getClientInfo(client);
             Account rubAccount = info.accounts().getAccount(Currency.RUB);
