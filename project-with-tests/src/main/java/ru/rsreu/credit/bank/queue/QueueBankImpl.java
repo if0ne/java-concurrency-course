@@ -22,6 +22,7 @@ public class QueueBankImpl extends AbstractBank {
 
         database = new SingleThreadClientDatabase();
         requestListener = new Thread(new RequestListener(requests));
+        requestListener.setDaemon(true);
         requestListener.start();
     }
 
